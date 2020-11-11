@@ -11,6 +11,10 @@ class MyApp:
         self.board_GUI = []
         n = 4
         self.board_base = [[0 for i in range(n)] for j in range(n)]
+        self.root.bind("<Up>", self.new_move)
+        self.root.bind("<Down>", self.new_move)
+        self.root.bind("<Left>", self.new_move)
+        self.root.bind("<Right>", self.new_move)
 
         self.menu_bar()
         self.make_score()
@@ -18,8 +22,17 @@ class MyApp:
 
         self.board_base[2][3] = 4
         self.board_base[3][0] = 8
-
         self.update_board()
+
+
+    def new_move(self, evt):
+        pprint(evt.keysym)
+        # TODO: move can be performed / move change state of the board_base
+            # TODO: game_logic where board_base elements change their position
+            # self.update_board()  # Updating new view is ready
+            # TODO: update current SCORE
+        # TODO: END GAME = moves doesn't do anything
+
 
     def make_score(self):
         self.score_frame = tk.Frame(self.root)
