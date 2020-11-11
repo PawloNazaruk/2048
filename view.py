@@ -16,6 +16,8 @@ class MyApp:
         self.make_score()
         self.make_board()
 
+        self.board_base[2][3] = 4
+        self.board_base[3][0] = 8
 
         self.update_board()
 
@@ -47,10 +49,11 @@ class MyApp:
         pprint(self.board_base)
         numbers = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
         for i, row in enumerate(self.board_base):
-            for j in row:
-                if j in numbers:
-                    self.board_GUI[i][j]['frame'].config(bg=c.CELL_COLORS[j])
-                    self.board_GUI[i][j]['number'].config(bg=c.CELL_COLORS[j], text=str(j), font=c.CELL_NUMBER_FONTS[j])
+            for j, val in enumerate(row):
+                pprint(f"(i={i},j={j})")
+                if val in numbers:
+                    self.board_GUI[i][j]['frame'].config(bg=c.CELL_COLORS[val])
+                    self.board_GUI[i][j]['number'].config(bg=c.CELL_COLORS[val], text=str(val), font=c.CELL_NUMBER_FONTS[val])
                 else:
                     self.board_GUI[i][j]['frame'].config(bg=c.EMPTY_CELL_COLOR)
                     self.board_GUI[i][j]['number'].config(bg=c.EMPTY_CELL_COLOR, text="")
