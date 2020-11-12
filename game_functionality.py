@@ -1,4 +1,3 @@
-
 from pprint import pprint
 from collections import deque
 
@@ -10,8 +9,7 @@ tab = [[r.choice(numbers) for j in range(4)] for i in range(4)]
 pprint(tab)
 
 
-
-def move_elements(row):
+def switch_elements(row):
     row_length = len(row)
     que = deque()
 
@@ -33,13 +31,25 @@ def move_elements(row):
     return list(que)
 
 
-print("Move left")
-for row in tab:
-    row = move_elements(row)
-    print(row)
 
-print("Move right")
-for row in tab:
-    row = move_elements(row[::-1])[::-1]
-    print(row)
+def move_elements_left(matrix):
+    print("Move left")
+    new_matrix = deque()
+    for row in matrix:
+        new_matrix.append(switch_elements(row))
+    return list(new_matrix)
+
+
+def move_elements_right(matrix):
+    print("Move right")
+    new_matrix = deque()
+    for row in matrix:
+        new_matrix.append(switch_elements(row[::-1])[::-1])
+    return list(new_matrix)
+
+def move_elements_top(matrix):
+    pass
+
+def move_elements_down(matrix):
+    pass
 
