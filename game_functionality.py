@@ -1,6 +1,5 @@
 from pprint import pprint
 from collections import deque
-
 import random as r
 
 r.seed(12345)
@@ -31,7 +30,6 @@ def switch_elements(row):
     return list(que)
 
 
-
 def move_elements_left(matrix):
     print("Move left")
     new_matrix = deque()
@@ -47,9 +45,37 @@ def move_elements_right(matrix):
         new_matrix.append(switch_elements(row[::-1])[::-1])
     return list(new_matrix)
 
-def move_elements_top(matrix):
-    pass
+
+def move_elements_up(matrix):
+    print("Move up")
+    inverted_matrix = invert_matrix(matrix)
+    new_matrix = deque()
+    for row in inverted_matrix:
+        new_matrix.append(switch_elements(row))
+    return list(new_matrix)
+
 
 def move_elements_down(matrix):
-    pass
+    print("Move down")
+    inverted_matrix = invert_matrix(matrix)
+    new_matrix = []
+    for row in inverted_matrix:
+        new_matrix.append(switch_elements(row[::-1])[::-1])
+    return list(invert_matrix(new_matrix))
 
+
+def invert_matrix(matrix):
+    inverted_matrix = [[] for each_row in matrix]
+    for i in matrix:
+        for index, j in enumerate(i):
+            inverted_matrix[index].append(j)
+    print(f"Inverted matrix:\n{inverted_matrix}")
+    return inverted_matrix
+
+
+
+
+#print_mat(tab)
+
+#print(move_elements_up(tab))
+#print(move_elements_down(tab))
