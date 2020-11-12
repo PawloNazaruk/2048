@@ -27,6 +27,7 @@ class MyApp:
 
     def new_move(self, evt):
         pprint(evt.keysym)
+
         # TODO: move can be performed / move change state of the board_base
             # TODO: game_logic where board_base elements change their position
             # self.update_board()  # Updating new view is ready
