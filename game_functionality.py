@@ -2,11 +2,25 @@ from pprint import pprint
 from collections import deque
 import random as r
 
+
 r.seed(12345)
 numbers = [0, 2, 4, 8, 16, 32, 64]
 tab = [[r.choice(numbers) for j in range(4)] for i in range(4)]
 
-# TODO: too many elements summing during one move
+# TODO: too many elements are summed during one move
+
+
+def add_element(matrix):
+    n = len(matrix)
+    while True:
+        x = r.randint(0, n-1)
+        y = r.randint(0, n-1)
+        #print(f"x: {x}\ny: {y}")
+        if matrix[x][y] == 0:
+            weights = [.8, .2]
+            matrix[x][y] = r.choices([2, 4], weights)[0]
+            return matrix
+
 
 def move_elements_left(matrix):
     print("Move left: ")
@@ -85,8 +99,8 @@ def print_mat(matrix):
 
 
 print_mat(tab)
-print_mat(move_elements_up(tab))
+tab = add_element(tab)
+print_mat(tab)
 
 
-#print(move_elements_up(tab))
-#print(move_elements_down(tab))
+

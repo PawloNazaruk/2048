@@ -1,15 +1,16 @@
 import tkinter as tk
-import colors as c
-import game_functionality as gf
-from random import randint
 from pprint import pprint
 
+import colors as c
+import game_functionality as gf
 
-# TODO: move can be performed / move change state of the board_base
-# game_logic where board_base elements change their position
-# self.update_board()  # Updating new view is ready
-# TODO: update current SCORE
-# TODO: END GAME = moves doesn't do anything
+
+# 1. TODO: move can be performed / move change state of the board_base
+    # 1.a game_logic where board_base elements change their position
+    # 1.b self.update_board()  # Updating new view is ready
+    # 1.c TODO: Randomize new element
+    # 1.d TODO: update current SCORE
+# 2. TODO: END GAME = moves doesn't do anything
 
 class MyApp:
     def __init__(self, root):
@@ -95,6 +96,8 @@ class MyApp:
             "s": gf.move_elements_down(self.board_base),
         }
         self.board_base = to[direction]
+        # TODO: 1.c
+        self.board_base = gf.add_element(self.board_base)
         self.update_board()
 
     def __repr__(self):
