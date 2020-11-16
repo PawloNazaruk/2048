@@ -1,9 +1,15 @@
 import tkinter as tk
 import colors as c
-from game_functionality import *
+import game_functionality as gf
 from random import randint
 from pprint import pprint
 
+
+# TODO: move can be performed / move change state of the board_base
+# game_logic where board_base elements change their position
+# self.update_board()  # Updating new view is ready
+# TODO: update current SCORE
+# TODO: END GAME = moves doesn't do anything
 
 class MyApp:
     def __init__(self, root):
@@ -11,29 +17,23 @@ class MyApp:
         self.board_GUI = []
         n = 4
         self.board_base = [[0 for i in range(n)] for j in range(n)]
-        self.root.bind("<Up>", self.new_move)
-        self.root.bind("<Down>", self.new_move)
-        self.root.bind("<Left>", self.new_move)
-        self.root.bind("<Right>", self.new_move)
+        self.root.bind("<Up>", self.move_detected)
+        self.root.bind("<Down>", self.move_detected)
+        self.root.bind("<Left>", self.move_detected)
+        self.root.bind("<Right>", self.move_detected)
+        self.root.bind("<w>", self.move_detected)
+        self.root.bind("<s>", self.move_detected)
+        self.root.bind("<a>", self.move_detected)
+        self.root.bind("<d>", self.move_detected)
 
         self.menu_bar()
         self.make_score()
         self.make_board()
 
         self.board_base[2][3] = 4
+        self.board_base[2][2] = 4
         self.board_base[3][0] = 8
         self.update_board()
-
-
-    def new_move(self, evt):
-        pprint(evt.keysym)
-
-        # TODO: move can be performed / move change state of the board_base
-            # TODO: game_logic where board_base elements change their position
-            # self.update_board()  # Updating new view is ready
-            # TODO: update current SCORE
-        # TODO: END GAME = moves doesn't do anything
-
 
     def make_score(self):
         self.score_frame = tk.Frame(self.root)
@@ -76,6 +76,26 @@ class MyApp:
         menu_bar = tk.Menu(self.root)
         menu_bar.add_command(label="Restart", command=print("Restart"))
         menu_bar.add_command(label="Help", command=print("Help"))
+
+    def move_detected(self, evt):
+        pprint(evt.keysym)
+        # move_direction = ["Up", "Down", "Left", "Right"]
+        if evt.keysym in ["Up", "Down", "Left", "Right", "w", "s", "a", "d"]:
+            self.move_board_elements(evt.keysym)
+
+    def move_board_elements(self, direction):
+        to = {
+            "Left": gf.move_elements_left(self.board_base),
+            "Right": gf.move_elements_right(self.board_base),
+            "Up": gf.move_elements_up(self.board_base),
+            "Down": gf.move_elements_down(self.board_base),
+            "a": gf.move_elements_left(self.board_base),
+            "d": gf.move_elements_right(self.board_base),
+            "w": gf.move_elements_up(self.board_base),
+            "s": gf.move_elements_down(self.board_base),
+        }
+        self.board_base = to[direction]
+        self.update_board()
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.board_base})"
