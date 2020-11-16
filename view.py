@@ -31,7 +31,8 @@ class MyApp:
         self.make_score()
         self.make_board()
 
-        self.board_base[2][3] = 4
+        self.board_base[2][0] = 4
+        self.board_base[2][1] = 4
         self.board_base[2][2] = 4
         self.board_base[3][0] = 8
         self.update_board()

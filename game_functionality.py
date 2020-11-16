@@ -10,18 +10,6 @@ tab = [[r.choice(numbers) for j in range(4)] for i in range(4)]
 # TODO: too many elements are summed during one move
 
 
-def add_element(matrix):
-    n = len(matrix)
-    while True:
-        x = r.randint(0, n-1)
-        y = r.randint(0, n-1)
-        #print(f"x: {x}\ny: {y}")
-        if matrix[x][y] == 0:
-            weights = [.8, .2]
-            matrix[x][y] = r.choices([2, 4], weights)[0]
-            return matrix
-
-
 def move_elements_left(matrix):
     print("Move left: ")
     new_matrix = deque()
@@ -59,18 +47,22 @@ def move_elements_down(matrix):
 def switch_elements(row):
     row_length = len(row)
     que = deque()
-
-    for i in row:
-        if i == 0:
+    is_pair = 0  #
+    for val in row:
+        if val == 0:
             continue
+
         try:
-            if que[-1] == i:
+            if que[-1] == val and is_pair == 0:
+                is_pair = 1  # pair of the same values found, stops searching for new object for current sum
                 que.pop()
-                que.append(i*2)
+                que.append(val*2)
             else:
-                que.append(i)
+                if is_pair == 1:
+                    is_pair = 0  # value outside of the previous pair, starts searching for the new pair
+                que.append(val)
         except IndexError:  # first check when que is still empty
-            que.append(i)
+            que.append(val)
 
     while len(que) < row_length:
         que.append(0)
@@ -85,6 +77,18 @@ def invert_matrix(matrix):
             inverted_matrix[index].append(j)
     #print(f"Inverted matrix:\n{inverted_matrix}")
     return inverted_matrix
+
+
+def add_element(matrix):
+    n = len(matrix)
+    while True:
+        x = r.randint(0, n-1)
+        y = r.randint(0, n-1)
+        #print(f"x: {x}\ny: {y}")
+        if matrix[x][y] == 0:
+            weights = [.8, .2]
+            matrix[x][y] = r.choices([2, 4], weights)[0]
+            return matrix
 
 
 def print_mat(matrix):
