@@ -1,13 +1,17 @@
-from pprint import pprint
 from collections import deque
 import random as r
 
 
-r.seed(12345)
-numbers = [0, 2, 4, 8, 16, 32, 64]
-tab = [[r.choice(numbers) for j in range(4)] for i in range(4)]
-
-# TODO: too many elements are summed during one move
+def game_over(matrix):
+    if matrix != move_elements_left(matrix)[0]:
+        return 0
+    if matrix != move_elements_right(matrix)[0]:
+        return 0
+    if matrix != move_elements_up(matrix)[0]:
+        return 0
+    if matrix != move_elements_down(matrix)[0]:
+        return 0
+    return "END"
 
 
 def move_elements_left(matrix):
@@ -104,22 +108,3 @@ def add_element(matrix):
             weights = [.8, .2]
             matrix[x][y] = r.choices([2, 4], weights)[0]
             return matrix
-
-
-def print_mat(matrix):
-    text = ""
-    for i in matrix:
-        text += "["
-        for j in i:
-            text += str(j) + ","
-        text = text[:-1]
-        text += "]\n"
-    print(text)
-
-
-print_mat(tab)
-tab = add_element(tab)
-print_mat(tab)
-
-
-

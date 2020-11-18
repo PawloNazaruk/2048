@@ -1,15 +1,16 @@
 import tkinter as tk
+from tkinter import messagebox
 from pprint import pprint
 
 import colors as c
 import game_functionality as gf
 
 
-# 1. TODO: move can be performed / move change state of the board_base
+# 1. move can be performed / move change state of the board_base
     # 1.a game_logic where board_base elements change their position
     # 1.b self.update_board()  # Updating new view is ready
     # 1.c Randomize new element
-    # 1.d TODO: update current SCORE
+    # 1.d update current SCORE
 # 2. TODO: END GAME = moves doesn't do anything
 
 class MyApp:
@@ -27,15 +28,8 @@ class MyApp:
         self.root.bind("<a>", self.move_detected)
         self.root.bind("<d>", self.move_detected)
 
-        self.menu_bar()
         self.make_score()
         self.make_board()
-
-        self.board_base[2][0] = 4
-        self.board_base[2][1] = 4
-        self.board_base[2][2] = 4
-        self.board_base[3][0] = 8
-        self.update_board()
 
     def make_score(self):
         self.score_frame = tk.Frame(self.root)
@@ -77,16 +71,14 @@ class MyApp:
                     self.board_GUI[i][j]['number'].config(bg=c.EMPTY_CELL_COLOR, text="")
         self.score_label.config(text=self.score.get())
 
-    def menu_bar(self):
-        menu_bar = tk.Menu(self.root)
-        menu_bar.add_command(label="Restart", command=print("Restart"))
-        menu_bar.add_command(label="Help", command=print("Help"))
-
     def move_detected(self, evt):
         pprint(evt.keysym)
         # move_direction = ["Up", "Down", "Left", "Right"]
         if evt.keysym in ["Up", "Down", "Left", "Right", "w", "s", "a", "d"]:
-            self.move_board_elements(evt.keysym)
+            if gf.game_over(self.board_base) == "END":
+                messagebox.showinfo("Game Over", f"Yous score: {self.score.get()}")
+            else:
+                self.move_board_elements(evt.keysym)
 
     def move_board_elements(self, direction):
         to = {
@@ -99,11 +91,12 @@ class MyApp:
             "w": gf.move_elements_up(self.board_base),
             "s": gf.move_elements_down(self.board_base),
         }
+        if self.board_base == to[direction][0]:
+            return
         new_board_base, gained_score = to[direction]
         self.board_base = new_board_base
         self.board_base = gf.add_element(self.board_base)
-        val = self.score.get() + gained_score
-        self.score.set(val)
+        self.score.set(self.score.get() + gained_score)
         self.update_board()
 
     def __repr__(self):
