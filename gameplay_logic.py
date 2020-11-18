@@ -3,68 +3,81 @@ import random as r
 
 
 def start_game(matrix):
+    """Fill the given matrix with two random elements."""
     return add_element(add_element(matrix))
 
 
-def game_over(matrix):
-    if matrix != move_elements_left(matrix)[0]:
-        return 0
-    if matrix != move_elements_right(matrix)[0]:
-        return 0
-    if matrix != move_elements_up(matrix)[0]:
-        return 0
-    if matrix != move_elements_down(matrix)[0]:
-        return 0
-    return "END"
+def add_element(matrix):
+    """Adds random integer from [2,4] to the random coord of the matrix."""
+    n = len(matrix)
+    while True:
+        x = r.randint(0, n-1)
+        y = r.randint(0, n-1)
+        if matrix[x][y] == 0:
+            weights = [.8, .2]
+            matrix[x][y] = r.choices([2, 4], weights)[0]
+            return matrix
 
 
 def move_elements_left(matrix):
-    print("Move left: ")
+    """Performs movement of the matrix elements to the left side."""
     new_matrix = deque()
     score = 0
     for row in matrix:
-        new_row, score_gained = switch_elements(row)
+        new_row, score_gained = move_elements(row)
         new_matrix.append(new_row)
         score += score_gained
     return list(new_matrix), score
 
 
 def move_elements_right(matrix):
-    print("Move right: ")
+    """Performs movement of the matrix elements to the right side."""
+
     new_matrix = deque()
     score = 0
     for row in matrix:
-        new_row, score_gained = switch_elements(row[::-1])
+        new_row, score_gained = move_elements(row[::-1])
         new_matrix.append(new_row[::-1])
         score += score_gained
     return list(new_matrix), score
 
 
 def move_elements_up(matrix):
-    print("Move up: ")
+    """Performs movement of the matrix elements to the up side."""
     inverted_matrix = invert_matrix(matrix)
     new_matrix = deque()
     score = 0
     for row in inverted_matrix:
-        new_row, score_gained = switch_elements(row)
+        new_row, score_gained = move_elements(row)
         new_matrix.append(new_row)
         score += score_gained
     return list(invert_matrix(new_matrix)), score
 
 
 def move_elements_down(matrix):
-    print("Move down: ")
+    """Performs movement of the matrix elements to the down side."""
     inverted_matrix = invert_matrix(matrix)
     new_matrix = []
     score = 0
     for row in inverted_matrix:
-        new_row, score_gained = switch_elements(row[::-1])
+        new_row, score_gained = move_elements(row[::-1])
         new_matrix.append(new_row[::-1])
         score += score_gained
     return list(invert_matrix(new_matrix)), score
 
 
-def switch_elements(row):
+def move_elements(row):
+    """Moves elements in the list and sum the score.
+
+    All 0 are dropped from the list, then each remaining element is
+    checked with the next if they are the same. If pair like them is
+    found they become new element which equals to their sum. At the
+    end 0 fills the list to the starting size.
+
+    Returns:
+        list(que) - Row after moving it's elements.
+        score - Sum of the found pair values.
+    """
     row_length = len(row)
     que = deque()
     is_pair = 0
@@ -72,7 +85,6 @@ def switch_elements(row):
     for val in row:
         if val == 0:
             continue
-
         try:
             if que[-1] == val and is_pair == 0:
                 is_pair = 1  # pair of the same values found, stops searching for new object for current sum
@@ -88,27 +100,27 @@ def switch_elements(row):
 
     while len(que) < row_length:
         que.append(0)
-    #pprint(f"Modified row: {que}")
+
     return list(que), score
 
 
 def invert_matrix(matrix):
+    """Changes rows with colums."""
     inverted_matrix = [[] for each_row in matrix]
     for i in matrix:
         for index, j in enumerate(i):
             inverted_matrix[index].append(j)
-    #print(f"Inverted matrix:\n{inverted_matrix}")
     return inverted_matrix
 
 
-def add_element(matrix):
-    n = len(matrix)
-    print(matrix)
-    while True:
-        x = r.randint(0, n-1)
-        y = r.randint(0, n-1)
-        #print(f"x: {x}\ny: {y}")
-        if matrix[x][y] == 0:
-            weights = [.8, .2]
-            matrix[x][y] = r.choices([2, 4], weights)[0]
-            return matrix
+def game_over(matrix):
+    """Ends the game if none from the movements can create new matrix."""
+    if matrix != move_elements_left(matrix)[0]:
+        return 0
+    if matrix != move_elements_right(matrix)[0]:
+        return 0
+    if matrix != move_elements_up(matrix)[0]:
+        return 0
+    if matrix != move_elements_down(matrix)[0]:
+        return 0
+    return "END"
