@@ -2,6 +2,10 @@ from collections import deque
 import random as r
 
 
+def start_game(matrix):
+    return add_element(add_element(matrix))
+
+
 def game_over(matrix):
     if matrix != move_elements_left(matrix)[0]:
         return 0

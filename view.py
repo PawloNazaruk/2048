@@ -28,8 +28,12 @@ class MyApp:
         self.root.bind("<a>", self.move_detected)
         self.root.bind("<d>", self.move_detected)
 
+
         self.make_score()
         self.make_board()
+
+        gf.start_game(self.board_base)
+        self.update_board()
 
     def make_score(self):
         self.score_frame = tk.Frame(self.root)
