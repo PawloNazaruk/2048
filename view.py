@@ -8,7 +8,7 @@ import game_functionality as gf
 # 1. TODO: move can be performed / move change state of the board_base
     # 1.a game_logic where board_base elements change their position
     # 1.b self.update_board()  # Updating new view is ready
-    # 1.c TODO: Randomize new element
+    # 1.c Randomize new element
     # 1.d TODO: update current SCORE
 # 2. TODO: END GAME = moves doesn't do anything
 
@@ -42,7 +42,9 @@ class MyApp:
         self.score_frame.place(relx=0.5, y=45, anchor="center")
         tk.Label(self.score_frame, text="Score", font=c.SCORE_FONT).grid(row=0)
 
-        self.score_label = tk.Label(self.score_frame, text="0", font=c.SCORE_LABEL_FONT)
+        self.score = tk.IntVar()
+        self.score.set(0)
+        self.score_label = tk.Label(self.score_frame, text=str(self.score.get()), font=c.SCORE_LABEL_FONT)
         self.score_label.grid(row=1)
 
     def make_board(self):
@@ -73,6 +75,7 @@ class MyApp:
                 else:
                     self.board_GUI[i][j]['frame'].config(bg=c.EMPTY_CELL_COLOR)
                     self.board_GUI[i][j]['number'].config(bg=c.EMPTY_CELL_COLOR, text="")
+        self.score_label.config(text=self.score.get())
 
     def menu_bar(self):
         menu_bar = tk.Menu(self.root)
@@ -96,9 +99,11 @@ class MyApp:
             "w": gf.move_elements_up(self.board_base),
             "s": gf.move_elements_down(self.board_base),
         }
-        self.board_base = to[direction]
-        # TODO: 1.c
+        new_board_base, gained_score = to[direction]
+        self.board_base = new_board_base
         self.board_base = gf.add_element(self.board_base)
+        val = self.score.get() + gained_score
+        self.score.set(val)
         self.update_board()
 
     def __repr__(self):

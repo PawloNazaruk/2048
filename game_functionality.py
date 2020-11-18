@@ -13,41 +13,54 @@ tab = [[r.choice(numbers) for j in range(4)] for i in range(4)]
 def move_elements_left(matrix):
     print("Move left: ")
     new_matrix = deque()
+    score = 0
     for row in matrix:
-        new_matrix.append(switch_elements(row))
-    return list(new_matrix)
+        new_row, score_gained = switch_elements(row)
+        new_matrix.append(new_row)
+        score += score_gained
+    return list(new_matrix), score
 
 
 def move_elements_right(matrix):
     print("Move right: ")
     new_matrix = deque()
+    score = 0
     for row in matrix:
-        new_matrix.append(switch_elements(row[::-1])[::-1])
-    return list(new_matrix)
+        new_row, score_gained = switch_elements(row[::-1])
+        new_matrix.append(new_row[::-1])
+        score += score_gained
+    return list(new_matrix), score
 
 
 def move_elements_up(matrix):
     print("Move up: ")
     inverted_matrix = invert_matrix(matrix)
     new_matrix = deque()
+    score = 0
     for row in inverted_matrix:
-        new_matrix.append(switch_elements(row))
-    return list(invert_matrix(new_matrix))
+        new_row, score_gained = switch_elements(row)
+        new_matrix.append(new_row)
+        score += score_gained
+    return list(invert_matrix(new_matrix)), score
 
 
 def move_elements_down(matrix):
     print("Move down: ")
     inverted_matrix = invert_matrix(matrix)
     new_matrix = []
+    score = 0
     for row in inverted_matrix:
-        new_matrix.append(switch_elements(row[::-1])[::-1])
-    return list(invert_matrix(new_matrix))
+        new_row, score_gained = switch_elements(row[::-1])
+        new_matrix.append(new_row[::-1])
+        score += score_gained
+    return list(invert_matrix(new_matrix)), score
 
 
 def switch_elements(row):
     row_length = len(row)
     que = deque()
-    is_pair = 0  #
+    is_pair = 0
+    score = 0
     for val in row:
         if val == 0:
             continue
@@ -57,6 +70,7 @@ def switch_elements(row):
                 is_pair = 1  # pair of the same values found, stops searching for new object for current sum
                 que.pop()
                 que.append(val*2)
+                score = val*2
             else:
                 if is_pair == 1:
                     is_pair = 0  # value outside of the previous pair, starts searching for the new pair
@@ -67,7 +81,7 @@ def switch_elements(row):
     while len(que) < row_length:
         que.append(0)
     #pprint(f"Modified row: {que}")
-    return list(que)
+    return list(que), score
 
 
 def invert_matrix(matrix):
@@ -81,6 +95,7 @@ def invert_matrix(matrix):
 
 def add_element(matrix):
     n = len(matrix)
+    print(matrix)
     while True:
         x = r.randint(0, n-1)
         y = r.randint(0, n-1)
